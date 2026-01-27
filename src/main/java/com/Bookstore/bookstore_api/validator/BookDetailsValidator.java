@@ -6,19 +6,15 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class BookDetailsValidator {
-
-    public void validateBookDetails(BookDetailsRequestDTO dto){
-
-        if(dto.getBookType() == null ){
-            throw new ValidationException("BookType cannot be empty");
+    public void validateBookDetails(BookDetailsRequestDTO dto) {
+        if (dto.getBookType() == null) {
+            throw new ValidationException("BookType è obbligatorio");
         }
-
         if (dto.getPrice() <= 0) {
-            throw new ValidationException("Page count must be positive");
+            throw new ValidationException("Prezzo deve essere positivo");
         }
-
         if (dto.getStockQuantity() < 0) {
-            throw new ValidationException( "Stock quantity cannot be negative");
+            throw new ValidationException("Quantità stock non può essere negativa");
         }
     }
 }

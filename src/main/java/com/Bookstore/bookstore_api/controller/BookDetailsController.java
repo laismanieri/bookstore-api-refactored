@@ -7,11 +7,13 @@ import com.Bookstore.bookstore_api.repository.BookRepository;
 import com.Bookstore.bookstore_api.service.BookDetailsService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,16 +30,22 @@ public class BookDetailsController {
     private final BookRepository bookRepository;
 
     @GetMapping
-    public ResponseEntity<List<BookDetailsResponseDTO>> getAllBookDetail() {
+    public ResponseEntity<List<BookDetailsResponseDTO>> getAll() {
         return ResponseEntity.ok(bookDetailsService.listAllBookDetail());
     }
 
-    @GetMapping(value = "{id}")
-    public ResponseEntity<BookDetailsResponseDTO> getBookDetailById(@PathVariable Long id) {
+    @GetMapping("/{id}")
+    public ResponseEntity<BookDetailsResponseDTO> getById(@PathVariable Long id) {
         return ResponseEntity.ok(bookDetailsService.getBookDetailById(id));
     }
 
-    @PutMapping(value = "{id}")
+    @PostMapping
+    public ResponseEntity<BookDetailsResponseDTO> create(@Valid @RequestBody BookDetailsRequestDTO dto) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(bookDetailsService.createBookDetail(dto));
+    }
+
+    @PutMapping("/{id}")
     public ResponseEntity<BookDetailsResponseDTO> updateBookDetails(
             @PathVariable Long id,
             @Valid @RequestBody BookDetailsRequestDTO bookDetailsRequestDTO) {
@@ -45,11 +53,9 @@ public class BookDetailsController {
         return ResponseEntity.ok(updateBookDetails);
     }
 
-    @DeleteMapping(value = "{guid}")
+    @DeleteMapping("/{guid}")
     public ResponseEntity<Void> deleteDetailBook (@PathVariable String guid){
         bookDetailsService.deleteDetailBook(guid);
         return ResponseEntity.noContent().build();
     }
-
-
 }

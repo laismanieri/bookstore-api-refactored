@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -26,6 +27,9 @@ public class BookDetailsService {
 
     @Transactional(readOnly = true)
     public List<BookDetailsResponseDTO> listAllBookDetail() {
+
+        log.info("Listing all details");
+
         return bookDetailsRepository.findAll()
                 .stream()
                 .map(bookMapper::toDetailResponse)
@@ -34,16 +38,43 @@ public class BookDetailsService {
 
     @Transactional(readOnly = true)
     public BookDetailsResponseDTO getBookDetailById(Long id) {
+
+        log.info("Finding detail by ID: {}", id);
+
         BookDetailsEntity bookDetail = bookDetailsRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Book not found"));
+                .orElseThrow(() -> new RuntimeException("Details not found: " + id));
         return bookMapper.toDetailResponse(bookDetail);
     }
 
     @Transactional
+    public BookDetailsResponseDTO createBookDetail(BookDetailsRequestDTO dto) {
+
+        log.info("Creating book detail");
+
+        bookDetailsValidator.validateBookDetails(dto);
+
+        BookDetailsEntity newDetail = new BookDetailsEntity();
+        newDetail.setGuid(UUID.randomUUID().toString());
+        newDetail.setBookType(dto.getBookType());
+        newDetail.setPrice(dto.getPrice());
+        newDetail.setStockQuantity(dto.getStockQuantity());
+        newDetail.setOnSale(dto.isOnSale());
+        newDetail.setFeatured(dto.isFeatured());
+
+        log.debug("Create book detail [ID = {}]", newDetail.getId());
+
+        BookDetailsEntity saved = bookDetailsRepository.save(newDetail);
+        return bookMapper.toDetailResponse(saved);
+    }
+
+
+    @Transactional
     public BookDetailsResponseDTO updateDetailsBook(@Valid BookDetailsRequestDTO dto, Long id) {
 
+        log.info("Updating book detail [ID = {}]", id);
+
         BookDetailsEntity existingDetailsBook = bookDetailsRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Details not found"));
+                .orElseThrow(() -> new RuntimeException("Details not found: " + id));
 
         existingDetailsBook.setBookType(dto.getBookType());
         existingDetailsBook.setPrice(dto.getPrice());
@@ -59,10 +90,15 @@ public class BookDetailsService {
     }
 
     @Transactional
-    public void deleteDetailBook(String guid){
-        BookDetailsEntity existingBookDetail = bookDetailsRepository.findByGuid(guid)
-                .orElseThrow(() -> new ValidationException("BookDetail not found"));
-        log.debug("Deleting book [ GUID = {} ]", guid);
-        bookDetailsRepository.delete(existingBookDetail);
+    public void deleteDetailBook(String guid) {
+
+        log.info("Deleting book GUID: {}", guid);
+
+        BookDetailsEntity existing = bookDetailsRepository.findByGuid(guid)
+                .orElseThrow(() -> new ValidationException("BookDetail GUID not found: " + guid));
+
+        log.debug("Deleting book detail [GUID = {}]", guid);
+
+        bookDetailsRepository.delete(existing);
     }
 }

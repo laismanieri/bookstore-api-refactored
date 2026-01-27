@@ -87,7 +87,7 @@ public class BookService {
         log.info("Finding book by ID: {}", id);
 
         BookEntity book = bookRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Book not found"));
+                .orElseThrow(() -> new RuntimeException("Book not found: " + id));
         return bookMapper.toResponse(book);
     }
 
@@ -97,7 +97,7 @@ public class BookService {
         log.info("Updating book ID: {}", id);
 
         BookEntity existingBook = bookRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Book not found"));
+                .orElseThrow(() -> new RuntimeException("Book not found: " + id));
 
         existingBook.setTitle(dto.getTitle());
         existingBook.setAuthor(dto.getAuthor());
@@ -121,8 +121,7 @@ public class BookService {
         log.info("Deleting book GUID: {}", guid);
 
         BookEntity existingBook = bookRepository.findByGuid(guid).orElseThrow(
-                () -> new ValidationException("Book not found")
-        );
+                () -> new ValidationException("Book GUID not found: " + guid));
 
         log.debug("Deleting book [ GUID = {} ]", guid);
 

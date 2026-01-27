@@ -38,10 +38,9 @@ public class BookMapper {
         dto.setGenre(book.getGenre());
         dto.setImageUrl(book.getImageUrl());
 
-        // Detalhes
         if (book.getDetails() != null && !book.getDetails().isEmpty()) {
             dto.setDetails(
-                    book.getDetails().stream()  // ← book.getDetails(), não dto
+                    book.getDetails().stream()
                             .map(this::toDetailResponse)
                             .toList()
             );
@@ -49,17 +48,6 @@ public class BookMapper {
 
         return dto;
     }
-
-    public BookDetailsEntity toDetailEntity(BookDetailsRequestDTO dto) {
-        BookDetailsEntity entity = new BookDetailsEntity();
-        entity.setBookType(dto.getBookType());
-        entity.setPrice(dto.getPrice());
-        entity.setStockQuantity(dto.getStockQuantity());
-        entity.setOnSale(dto.isOnSale());
-        entity.setFeatured(dto.isFeatured());
-        return entity;
-    }
-
 
     public BookDetailsResponseDTO toDetailResponse(BookDetailsEntity detail) {
         BookDetailsResponseDTO dto = new BookDetailsResponseDTO();
