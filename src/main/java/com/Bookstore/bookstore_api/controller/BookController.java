@@ -2,7 +2,6 @@ package com.Bookstore.bookstore_api.controller;
 
 import com.Bookstore.bookstore_api.dto.BookRequestDTO;
 import com.Bookstore.bookstore_api.dto.BookResponseDTO;
-import com.Bookstore.bookstore_api.entity.BookEntity;
 import com.Bookstore.bookstore_api.mapper.BookMapper;
 import com.Bookstore.bookstore_api.service.BookService;
 import jakarta.validation.Valid;
@@ -19,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -40,10 +40,9 @@ public class BookController {
     }
 
     @PostMapping
-    public ResponseEntity<BookResponseDTO> createBook(@Valid @RequestBody BookRequestDTO bookRequestDTO) {
-        BookEntity savedBook = bookService.addNewBook(bookRequestDTO);
-        BookResponseDTO responseDTO = bookMapper.toResponse(savedBook);
-        return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
+    public ResponseEntity<BookResponseDTO> createBook(@Valid @RequestBody BookRequestDTO dto) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(bookService.addNewBook(dto));
     }
 
     @PutMapping(value = "{id}")
@@ -54,10 +53,11 @@ public class BookController {
         return ResponseEntity.ok(updatedBook);
     }
 
-    @DeleteMapping(value = "{guid}")
-    public ResponseEntity<Void> deleteBook (@PathVariable String guid){
+    @DeleteMapping("/{guid}")
+    public ResponseEntity<Map<String, String>> deleteBook(@PathVariable String guid) {
         bookService.deleteBook(guid);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return ResponseEntity.ok(Map.of("message", "Book deleted successfully"));
     }
+
 
 }

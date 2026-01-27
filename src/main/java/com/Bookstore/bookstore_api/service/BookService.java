@@ -13,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.UUID;
@@ -28,7 +27,8 @@ public class BookService {
     private final BookMapper bookMapper;
 
     @Transactional
-    public BookEntity addNewBook(BookRequestDTO dto) {
+    public BookResponseDTO addNewBook(BookRequestDTO dto) {
+        log.info("Creating book: {}", dto.getTitle());
 
         bookValidator.validateBook(dto);
 
@@ -58,18 +58,23 @@ public class BookService {
                         newBookDetails.setBook(newBook);
 
                         return newBookDetails;
-
                     })
                     .toList();
             newBook.setDetails(detailsEntities);
         }
 
-        log.debug("Adding a new book [GUID = {}, Title = {}]", newBook.getGuid(), newBook.getTitle());
-        return bookRepository.save(newBook);
+        BookEntity saved = bookRepository.save(newBook);
+        log.info("Book created successfully: ID={}, GUID={}", saved.getId(), saved.getGuid());
+
+        return bookMapper.toResponse(saved);
     }
+
 
     @Transactional(readOnly = true)
     public List<BookResponseDTO> listAllBooks() {
+
+        log.info("Listing all books");
+
         return bookRepository.findAll()
                 .stream()
                 .map(bookMapper::toResponse)
@@ -78,6 +83,9 @@ public class BookService {
 
     @Transactional(readOnly = true)
     public BookResponseDTO getBookById(Long id) {
+
+        log.info("Finding book by ID: {}", id);
+
         BookEntity book = bookRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Book not found"));
         return bookMapper.toResponse(book);
@@ -85,6 +93,9 @@ public class BookService {
 
     @Transactional
     public BookResponseDTO updateBook(Long id, @Valid BookRequestDTO dto) {
+
+        log.info("Updating book ID: {}", id);
+
         BookEntity existingBook = bookRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Book not found"));
 
@@ -106,10 +117,15 @@ public class BookService {
 
     @Transactional
     public void deleteBook(String guid){
+
+        log.info("Deleting book GUID: {}", guid);
+
         BookEntity existingBook = bookRepository.findByGuid(guid).orElseThrow(
                 () -> new ValidationException("Book not found")
         );
+
         log.debug("Deleting book [ GUID = {} ]", guid);
+
         bookRepository.delete(existingBook);
     }
 }

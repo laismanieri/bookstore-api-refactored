@@ -1,6 +1,8 @@
 package com.Bookstore.bookstore_api.mapper;
 
+import com.Bookstore.bookstore_api.dto.BookDetailsRequestDTO;
 import com.Bookstore.bookstore_api.dto.BookDetailsResponseDTO;
+import com.Bookstore.bookstore_api.dto.BookRequestDTO;
 import com.Bookstore.bookstore_api.dto.BookResponseDTO;
 import com.Bookstore.bookstore_api.entity.BookDetailsEntity;
 import com.Bookstore.bookstore_api.entity.BookEntity;
@@ -9,7 +11,22 @@ import org.springframework.stereotype.Component;
 @Component
 public class BookMapper {
 
+    public BookEntity toEntity(BookRequestDTO dto) {
+        BookEntity entity = new BookEntity();
+        entity.setTitle(dto.getTitle());
+        entity.setAuthor(dto.getAuthor());
+        entity.setPublisher(dto.getPublisher());
+        entity.setPublicationYear(dto.getPublicationYear());
+        entity.setPageCount(dto.getPageCount());
+        entity.setSynopsis(dto.getSynopsis());
+        entity.setGenre(dto.getGenre());
+        entity.setImageUrl(dto.getImageUrl());
+        return entity;
+    }
+
     public BookResponseDTO toResponse(BookEntity book) {
+        if (book == null) return null;
+
         BookResponseDTO dto = new BookResponseDTO();
         dto.setId(book.getId());
         dto.setTitle(book.getTitle());
@@ -21,9 +38,10 @@ public class BookMapper {
         dto.setGenre(book.getGenre());
         dto.setImageUrl(book.getImageUrl());
 
-        if (book.getDetails() != null) {
+        // Detalhes
+        if (book.getDetails() != null && !book.getDetails().isEmpty()) {
             dto.setDetails(
-                    book.getDetails().stream()
+                    book.getDetails().stream()  // ← book.getDetails(), não dto
                             .map(this::toDetailResponse)
                             .toList()
             );
@@ -31,6 +49,17 @@ public class BookMapper {
 
         return dto;
     }
+
+    public BookDetailsEntity toDetailEntity(BookDetailsRequestDTO dto) {
+        BookDetailsEntity entity = new BookDetailsEntity();
+        entity.setBookType(dto.getBookType());
+        entity.setPrice(dto.getPrice());
+        entity.setStockQuantity(dto.getStockQuantity());
+        entity.setOnSale(dto.isOnSale());
+        entity.setFeatured(dto.isFeatured());
+        return entity;
+    }
+
 
     public BookDetailsResponseDTO toDetailResponse(BookDetailsEntity detail) {
         BookDetailsResponseDTO dto = new BookDetailsResponseDTO();

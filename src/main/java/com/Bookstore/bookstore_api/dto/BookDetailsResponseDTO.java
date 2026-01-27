@@ -1,8 +1,6 @@
 package com.Bookstore.bookstore_api.dto;
 
 import com.Bookstore.bookstore_api.enums.BookType;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
 import lombok.Data;
 
 @Data

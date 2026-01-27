@@ -1,7 +1,6 @@
 package com.Bookstore.bookstore_api.validator;
 
 import com.Bookstore.bookstore_api.dto.BookDetailsRequestDTO;
-import com.Bookstore.bookstore_api.dto.BookDetailsResponseDTO;
 import com.Bookstore.bookstore_api.exceptions.ValidationException;
 import org.springframework.stereotype.Component;
 
