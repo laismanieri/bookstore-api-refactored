@@ -32,7 +32,7 @@ public class BookMapper {
         return dto;
     }
 
-    private BookDetailsResponseDTO toDetailResponse(BookDetailsEntity detail) {
+    public BookDetailsResponseDTO toDetailResponse(BookDetailsEntity detail) {
         BookDetailsResponseDTO dto = new BookDetailsResponseDTO();
         dto.setBookType(detail.getBookType());
         dto.setPrice(detail.getPrice());

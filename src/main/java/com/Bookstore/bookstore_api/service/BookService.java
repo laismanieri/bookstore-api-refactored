@@ -98,7 +98,9 @@ public class BookService {
         existingBook.setImageUrl(dto.getImageUrl());
 
         BookEntity savedBook = bookRepository.save(existingBook);
+
         log.debug("Updating book [ id = {}, Title = {}]", id, existingBook.getTitle());
+
         return bookMapper.toResponse(savedBook);
     }
 
