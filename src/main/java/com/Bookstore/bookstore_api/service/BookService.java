@@ -1,6 +1,7 @@
 package com.Bookstore.bookstore_api.service;
 
-import com.Bookstore.bookstore_api.dto.BookDTO;
+import com.Bookstore.bookstore_api.dto.BookRequestDTO;
+import com.Bookstore.bookstore_api.dto.BookDetailsResponseDTO;
 import com.Bookstore.bookstore_api.entity.BookDetailsEntity;
 import com.Bookstore.bookstore_api.entity.BookEntity;
 import com.Bookstore.bookstore_api.repository.BookRepository;
@@ -12,7 +13,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -23,7 +23,8 @@ public class BookService {
     private final BookValidator bookValidator;
 
     @Transactional
-    public BookEntity addNewBook(BookDTO dto) {
+    public BookEntity addNewBook(BookRequestDTO dto) {
+
         bookValidator.validateBook(dto);
 
         BookEntity newBook = new BookEntity();
@@ -39,7 +40,7 @@ public class BookService {
 
         log.debug("Adding a new book [GUID = {}, Title = {}]", newBook.getGuid(), newBook.getTitle());
 
-        if (dto.getDetails() != null && !dto.getDetails().isEmpty()) {
+        if (dto.getDetails() != null) {
             List<BookDetailsEntity> detailsEntities = dto.getDetails().stream()
                     .map(detailDto -> {
                         BookDetailsEntity newBookDetails = new BookDetailsEntity();
@@ -49,22 +50,17 @@ public class BookService {
                         newBookDetails.setStockQuantity(detailDto.getStockQuantity());
                         newBookDetails.setOnSale(detailDto.isOnSale());
                         newBookDetails.setFeatured(detailDto.isFeatured());
-
-                        float discountedPrice = detailDto.isOnSale()
-                                ? detailDto.getPrice() * 0.9f
-                                : detailDto.getPrice();
-
-                        detailDto.setDiscountedPrice(discountedPrice);
                         newBookDetails.setBook(newBook);
 
                         return newBookDetails;
+
                     })
                     .toList();
-
             newBook.setDetails(detailsEntities);
         }
 
         log.debug("Adding a new book [GUID = {}, Title = {}]", newBook.getGuid(), newBook.getTitle());
         return bookRepository.save(newBook);
     }
+
 }

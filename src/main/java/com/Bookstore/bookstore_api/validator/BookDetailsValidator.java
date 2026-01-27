@@ -1,13 +1,13 @@
 package com.Bookstore.bookstore_api.validator;
 
-import com.Bookstore.bookstore_api.dto.BookDetailsDTO;
+import com.Bookstore.bookstore_api.dto.BookDetailsResponseDTO;
 import com.Bookstore.bookstore_api.exceptions.ValidationException;
 import org.springframework.stereotype.Component;
 
 @Component
 public class BookDetailsValidator {
 
-    public void validateBookDetails(BookDetailsDTO dto){
+    public void validateBookDetails(BookDetailsResponseDTO dto){
 
         if(dto.getBookType() == null ){
             throw new ValidationException("BookType cannot be empty");

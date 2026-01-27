@@ -1,6 +1,6 @@
 package com.Bookstore.bookstore_api.service;
 
-import com.Bookstore.bookstore_api.dto.BookDetailsDTO;
+import com.Bookstore.bookstore_api.dto.BookDetailsResponseDTO;
 import com.Bookstore.bookstore_api.entity.BookDetailsEntity;
 import com.Bookstore.bookstore_api.entity.BookEntity;
 import com.Bookstore.bookstore_api.repository.BookDetailsRepository;
@@ -25,7 +25,7 @@ public class BookDetailsService {
     private final BookRepository bookRepository;
 
     @Transactional
-    public BookDetailsEntity addNewBookDetails(BookDetailsDTO dto){
+    public BookDetailsEntity addNewBookDetails(BookDetailsResponseDTO dto){
 
         bookDetailsValidator.validateBookDetails(dto);
 

@@ -6,19 +6,14 @@ import jakarta.validation.constraints.Positive;
 import lombok.Data;
 
 @Data
-public class BookDetailsDTO {
+public class BookDetailsResponseDTO {
 
-    private Long id;
-
-    @NotNull(message = "Book type is required")
     private BookType bookType;
 
-    @Positive(message = "Price must be positive")
     private float price;
 
     private float discountedPrice;
 
-    @Positive(message = "Stock quantity must be positive")
     private int stockQuantity;
 
     private boolean onSale;

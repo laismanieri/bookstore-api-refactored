@@ -17,6 +17,6 @@ public interface BookRepository extends JpaRepository<BookEntity, Long> {
 
     List<BookEntity> findByAuthor(String author);
 
-     List<BookEntity> findByPageCount(int pageCount);
+    List<BookEntity> findByPageCount(int pageCount);
 }
 

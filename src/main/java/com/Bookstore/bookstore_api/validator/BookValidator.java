@@ -1,6 +1,6 @@
 package com.Bookstore.bookstore_api.validator;
 
-import com.Bookstore.bookstore_api.dto.BookDTO;
+import com.Bookstore.bookstore_api.dto.BookRequestDTO;
 import com.Bookstore.bookstore_api.exceptions.ValidationException;
 import org.springframework.stereotype.Component;
 
@@ -9,7 +9,7 @@ import java.time.Year;
 @Component
 public class BookValidator {
 
-    public void validateBook(BookDTO dto) {
+    public void validateBook(BookRequestDTO dto) {
 
         String synopsis = dto.getSynopsis();
         int currentYear = Year.now().getValue();
