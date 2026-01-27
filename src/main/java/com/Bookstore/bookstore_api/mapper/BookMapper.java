@@ -15,6 +15,9 @@ public class BookMapper {
         dto.setTitle(book.getTitle());
         dto.setAuthor(book.getAuthor());
         dto.setPublisher(book.getPublisher());
+        dto.setPublicationYear(book.getPublicationYear());
+        dto.setPageCount(book.getPageCount());
+        dto.setSynopsis(book.getSynopsis());
         dto.setGenre(book.getGenre());
         dto.setImageUrl(book.getImageUrl());
 

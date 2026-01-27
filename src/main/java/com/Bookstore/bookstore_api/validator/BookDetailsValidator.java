@@ -1,5 +1,6 @@
 package com.Bookstore.bookstore_api.validator;
 
+import com.Bookstore.bookstore_api.dto.BookDetailsRequestDTO;
 import com.Bookstore.bookstore_api.dto.BookDetailsResponseDTO;
 import com.Bookstore.bookstore_api.exceptions.ValidationException;
 import org.springframework.stereotype.Component;
@@ -7,7 +8,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class BookDetailsValidator {
 
-    public void validateBookDetails(BookDetailsResponseDTO dto){
+    public void validateBookDetails(BookDetailsRequestDTO dto){
 
         if(dto.getBookType() == null ){
             throw new ValidationException("BookType cannot be empty");
@@ -19,9 +20,6 @@ public class BookDetailsValidator {
 
         if (dto.getStockQuantity() < 0) {
             throw new ValidationException( "Stock quantity cannot be negative");
-        }
-        if (dto.getBookId() == null) {
-            throw new ValidationException( "Book ID cannot be null");
         }
     }
 }
