@@ -26,6 +26,26 @@ public class BookService {
     private final BookValidator bookValidator;
     private final BookMapper bookMapper;
 
+    @Transactional(readOnly = true)
+    public List<BookResponseDTO> listAllBooks() {
+
+        log.info("Listing all books");
+
+        return bookRepository.findAll()
+                .stream()
+                .map(bookMapper::toResponse)
+                .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public BookResponseDTO getBookById(Long id) {
+
+        log.info("Finding book by ID: {}", id);
+
+        BookEntity book = bookRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Book not found: " + id));
+        return bookMapper.toResponse(book);
+    }
     @Transactional
     public BookResponseDTO addNewBook(BookRequestDTO dto) {
         log.info("Creating book: {}", dto.getTitle());
@@ -70,26 +90,6 @@ public class BookService {
     }
 
 
-    @Transactional(readOnly = true)
-    public List<BookResponseDTO> listAllBooks() {
-
-        log.info("Listing all books");
-
-        return bookRepository.findAll()
-                .stream()
-                .map(bookMapper::toResponse)
-                .toList();
-    }
-
-    @Transactional(readOnly = true)
-    public BookResponseDTO getBookById(Long id) {
-
-        log.info("Finding book by ID: {}", id);
-
-        BookEntity book = bookRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Book not found: " + id));
-        return bookMapper.toResponse(book);
-    }
 
     @Transactional
     public BookResponseDTO updateBook(Long id, @Valid BookRequestDTO dto) {
