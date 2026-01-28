@@ -2,8 +2,6 @@ package com.Bookstore.bookstore_api.controller;
 
 import com.Bookstore.bookstore_api.dto.BookDetailsRequestDTO;
 import com.Bookstore.bookstore_api.dto.BookDetailsResponseDTO;
-import com.Bookstore.bookstore_api.mapper.BookMapper;
-import com.Bookstore.bookstore_api.repository.BookRepository;
 import com.Bookstore.bookstore_api.service.BookDetailsService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -26,8 +24,6 @@ import java.util.List;
 public class BookDetailsController {
 
     private final BookDetailsService bookDetailsService;
-    private final BookMapper bookMapper;
-    private final BookRepository bookRepository;
 
     @GetMapping
     public ResponseEntity<List<BookDetailsResponseDTO>> getAll() {

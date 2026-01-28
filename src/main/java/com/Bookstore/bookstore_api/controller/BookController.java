@@ -2,7 +2,6 @@ package com.Bookstore.bookstore_api.controller;
 
 import com.Bookstore.bookstore_api.dto.BookRequestDTO;
 import com.Bookstore.bookstore_api.dto.BookResponseDTO;
-import com.Bookstore.bookstore_api.mapper.BookMapper;
 import com.Bookstore.bookstore_api.service.BookService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -26,8 +25,6 @@ import java.util.Map;
 public class BookController {
 
     private final BookService bookService;
-    private final BookMapper bookMapper;
-
 
     @GetMapping
     public ResponseEntity<List<BookResponseDTO>> getAllBooks() {
@@ -58,6 +55,4 @@ public class BookController {
         bookService.deleteBook(guid);
         return ResponseEntity.ok(Map.of("message", "Book deleted successfully"));
     }
-
-
 }
