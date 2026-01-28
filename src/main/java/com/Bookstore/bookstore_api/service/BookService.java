@@ -4,11 +4,11 @@ import com.Bookstore.bookstore_api.dto.BookRequestDTO;
 import com.Bookstore.bookstore_api.dto.BookResponseDTO;
 import com.Bookstore.bookstore_api.entity.BookDetailsEntity;
 import com.Bookstore.bookstore_api.entity.BookEntity;
+import com.Bookstore.bookstore_api.exceptions.DomainValidationException;
 import com.Bookstore.bookstore_api.mapper.BookMapper;
 import com.Bookstore.bookstore_api.repository.BookRepository;
 import com.Bookstore.bookstore_api.validator.BookValidator;
 import jakarta.validation.Valid;
-import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,12 +38,12 @@ public class BookService {
     }
 
     @Transactional(readOnly = true)
-    public BookResponseDTO getBookById(Long id) {
+    public BookResponseDTO getBookByGuid(String guid) {
 
-        log.info("Finding book by ID: {}", id);
+        log.info("Finding book by ID: {}", guid);
 
-        BookEntity book = bookRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Book not found: " + id));
+        BookEntity book = bookRepository.findByGuid(guid)
+                .orElseThrow(() -> new DomainValidationException("Book not found: " + guid));
         return bookMapper.toResponse(book);
     }
     @Transactional
@@ -84,20 +84,18 @@ public class BookService {
         }
 
         BookEntity saved = bookRepository.save(newBook);
-        log.info("Book created successfully: ID={}, GUID={}", saved.getId(), saved.getGuid());
+        log.debug("Book created successfully: ID={}, GUID={}", saved.getId(), saved.getGuid());
 
         return bookMapper.toResponse(saved);
     }
 
-
-
     @Transactional
-    public BookResponseDTO updateBook(Long id, @Valid BookRequestDTO dto) {
+    public BookResponseDTO updateBook(String guid, @Valid BookRequestDTO dto) {
 
-        log.info("Updating book ID: {}", id);
+        log.info("Updating book ID: {}", guid);
 
-        BookEntity existingBook = bookRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Book not found: " + id));
+        BookEntity existingBook = bookRepository.findByGuid(guid)
+                .orElseThrow(() -> new DomainValidationException("Book not found: " + guid));
 
         existingBook.setTitle(dto.getTitle());
         existingBook.setAuthor(dto.getAuthor());
@@ -110,7 +108,7 @@ public class BookService {
 
         BookEntity savedBook = bookRepository.save(existingBook);
 
-        log.debug("Updating book [ id = {}, Title = {}]", id, existingBook.getTitle());
+        log.debug("Updating book [ Guid = {}, Title = {}]", guid, existingBook.getTitle());
 
         return bookMapper.toResponse(savedBook);
     }
@@ -121,7 +119,7 @@ public class BookService {
         log.info("Deleting book GUID: {}", guid);
 
         BookEntity existingBook = bookRepository.findByGuid(guid).orElseThrow(
-                () -> new ValidationException("Book GUID not found: " + guid));
+                () -> new DomainValidationException("Book GUID not found: " + guid));
 
         log.debug("Deleting book [ GUID = {} ]", guid);
 

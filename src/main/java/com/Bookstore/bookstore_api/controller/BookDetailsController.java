@@ -34,24 +34,24 @@ public class BookDetailsController {
         return ResponseEntity.ok(bookDetailsService.listAllBookDetail());
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<BookDetailsResponseDTO> getById(@PathVariable Long id) {
-        return ResponseEntity.ok(bookDetailsService.getBookDetailById(id));
+    @GetMapping("/{guid}")
+    public ResponseEntity<BookDetailsResponseDTO> getByGuid(@PathVariable String guid) {
+        return ResponseEntity.ok(bookDetailsService.getBookDetailByGuid(guid));
     }
 
-    @PostMapping("/{bookId}/details")
+    @PostMapping("/{bookGuid}/details")
     public ResponseEntity<BookDetailsResponseDTO> createBookDetail(
-            @PathVariable Long bookId,
+            @PathVariable String bookGuid,
             @Valid @RequestBody BookDetailsRequestDTO dto) {
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(bookDetailsService.createBookDetail(dto, bookId));
+                .body(bookDetailsService.createBookDetail(dto, bookGuid));
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{guid}")
     public ResponseEntity<BookDetailsResponseDTO> updateBookDetails(
-            @PathVariable Long id,
+            @PathVariable String guid,
             @Valid @RequestBody BookDetailsRequestDTO bookDetailsRequestDTO) {
-        BookDetailsResponseDTO updateBookDetails = bookDetailsService.updateDetailsBook(bookDetailsRequestDTO, id);
+        BookDetailsResponseDTO updateBookDetails = bookDetailsService.updateDetailsBook(bookDetailsRequestDTO, guid);
         return ResponseEntity.ok(updateBookDetails);
     }
 

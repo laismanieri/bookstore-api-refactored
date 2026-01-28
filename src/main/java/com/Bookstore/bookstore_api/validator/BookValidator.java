@@ -1,7 +1,7 @@
 package com.Bookstore.bookstore_api.validator;
 
 import com.Bookstore.bookstore_api.dto.BookRequestDTO;
-import com.Bookstore.bookstore_api.exceptions.ValidationException;
+import com.Bookstore.bookstore_api.exceptions.DomainValidationException;
 import org.springframework.stereotype.Component;
 
 import java.time.Year;
@@ -15,27 +15,27 @@ public class BookValidator {
         int currentYear = Year.now().getValue();
 
         if (dto.getTitle() == null || dto.getTitle().isBlank()) {
-            throw new ValidationException("Title cannot be empty");
+            throw new DomainValidationException("Title cannot be empty");
         }
         if (dto.getAuthor() == null || dto.getAuthor().isBlank()) {
-            throw new ValidationException("Author cannot be empty");
+            throw new DomainValidationException("Author cannot be empty");
         }
         if (dto.getPublisher() == null || dto.getPublisher().isBlank()) {
-            throw new ValidationException("Publisher cannot be empty");
+            throw new DomainValidationException("Publisher cannot be empty");
         }
         if (dto.getPublicationYear() <= 0){
-            throw new ValidationException("Publication year cannot be empty e must be positive ");
+            throw new DomainValidationException("Publication year cannot be empty e must be positive ");
         }
         if (dto.getPageCount() <= 0) {
-            throw new ValidationException("Page count must be positive");
+            throw new DomainValidationException("Page count must be positive");
         }
 
         if (synopsis == null || synopsis.trim().isEmpty() || synopsis.trim().length() > 2000) {
-            throw new ValidationException("Synopsis cannot be empty or exceed 2000 characters");
+            throw new DomainValidationException("Synopsis cannot be empty or exceed 2000 characters");
         }
 
         if (dto.getPublicationYear() > currentYear) {
-            throw new ValidationException("Publication year cannot be in the future");
+            throw new DomainValidationException("Publication year cannot be in the future");
         }
     }
 }
