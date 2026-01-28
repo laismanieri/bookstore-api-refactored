@@ -39,10 +39,12 @@ public class BookDetailsController {
         return ResponseEntity.ok(bookDetailsService.getBookDetailById(id));
     }
 
-    @PostMapping
-    public ResponseEntity<BookDetailsResponseDTO> create(@Valid @RequestBody BookDetailsRequestDTO dto) {
+    @PostMapping("/{bookId}/details")
+    public ResponseEntity<BookDetailsResponseDTO> createBookDetail(
+            @PathVariable Long bookId,
+            @Valid @RequestBody BookDetailsRequestDTO dto) {
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(bookDetailsService.createBookDetail(dto));
+                .body(bookDetailsService.createBookDetail(dto, bookId));
     }
 
     @PutMapping("/{id}")

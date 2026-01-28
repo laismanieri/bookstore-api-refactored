@@ -11,7 +11,6 @@ import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-@EqualsAndHashCode(callSuper = true)
 @Data
 @Entity
 @Table(indexes = { @Index(name = "IDX_GUID_BOOKDETAILS", columnList = "GUID")})

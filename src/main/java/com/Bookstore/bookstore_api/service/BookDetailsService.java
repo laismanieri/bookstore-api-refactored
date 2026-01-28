@@ -3,8 +3,10 @@ package com.Bookstore.bookstore_api.service;
 import com.Bookstore.bookstore_api.dto.BookDetailsRequestDTO;
 import com.Bookstore.bookstore_api.dto.BookDetailsResponseDTO;
 import com.Bookstore.bookstore_api.entity.BookDetailsEntity;
+import com.Bookstore.bookstore_api.entity.BookEntity;
 import com.Bookstore.bookstore_api.mapper.BookMapper;
 import com.Bookstore.bookstore_api.repository.BookDetailsRepository;
+import com.Bookstore.bookstore_api.repository.BookRepository;
 import com.Bookstore.bookstore_api.validator.BookDetailsValidator;
 import jakarta.validation.Valid;
 import jakarta.validation.ValidationException;
@@ -22,6 +24,7 @@ import java.util.UUID;
 public class BookDetailsService {
 
     private final BookDetailsRepository bookDetailsRepository;
+    private final BookRepository bookRepository;
     private final BookDetailsValidator bookDetailsValidator;
     private final BookMapper bookMapper;
 
@@ -47,9 +50,12 @@ public class BookDetailsService {
     }
 
     @Transactional
-    public BookDetailsResponseDTO createBookDetail(BookDetailsRequestDTO dto) {
+    public BookDetailsResponseDTO createBookDetail(BookDetailsRequestDTO dto, Long bookId) {
 
         log.info("Creating book detail");
+
+        BookEntity book = bookRepository.findById(bookId)
+                .orElseThrow(() -> new ValidationException("Book not found"));
 
         bookDetailsValidator.validateBookDetails(dto);
 
@@ -60,6 +66,8 @@ public class BookDetailsService {
         newDetail.setStockQuantity(dto.getStockQuantity());
         newDetail.setOnSale(dto.isOnSale());
         newDetail.setFeatured(dto.isFeatured());
+
+        newDetail.setBook(book);
 
         log.debug("Create book detail [ID = {}]", newDetail.getId());
 

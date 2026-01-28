@@ -8,19 +8,12 @@ import jakarta.persistence.Index;
 import jakarta.persistence.Lob;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
+
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-@Builder
-@EqualsAndHashCode(callSuper = true)
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @Table(name = "books", indexes = { @Index(name = "IDX_GUID_BOOK", columnList = "GUID")})
 public class BookEntity extends BaseEntity {
