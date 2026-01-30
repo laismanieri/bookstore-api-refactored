@@ -3,7 +3,6 @@ package com.Bookstore.bookstore_api.controller;
 import com.Bookstore.bookstore_api.dto.BookDetailsRequestDTO;
 import com.Bookstore.bookstore_api.dto.BookDetailsResponseDTO;
 import com.Bookstore.bookstore_api.service.BookDetailsService;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,7 +37,7 @@ public class BookDetailsController {
     @PostMapping("/{bookGuid}/details")
     public ResponseEntity<BookDetailsResponseDTO> createBookDetail(
             @PathVariable String bookGuid,
-            @Valid @RequestBody BookDetailsRequestDTO dto) {
+            @RequestBody BookDetailsRequestDTO dto) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(bookDetailsService.createBookDetail(dto, bookGuid));
     }
@@ -46,7 +45,7 @@ public class BookDetailsController {
     @PutMapping("/{guid}")
     public ResponseEntity<BookDetailsResponseDTO> updateBookDetails(
             @PathVariable String guid,
-            @Valid @RequestBody BookDetailsRequestDTO bookDetailsRequestDTO) {
+            @RequestBody BookDetailsRequestDTO bookDetailsRequestDTO) {
         BookDetailsResponseDTO updateBookDetails = bookDetailsService.updateDetailsBook(bookDetailsRequestDTO, guid);
         return ResponseEntity.ok(updateBookDetails);
     }

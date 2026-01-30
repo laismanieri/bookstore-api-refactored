@@ -50,7 +50,7 @@ public class BookDetailsService {
     }
 
     @Transactional
-    public BookDetailsResponseDTO createBookDetail(BookDetailsRequestDTO dto, String guid) {
+        public BookDetailsResponseDTO createBookDetail(@Valid BookDetailsRequestDTO dto, String guid) {
 
         log.info("Creating book detail");
 

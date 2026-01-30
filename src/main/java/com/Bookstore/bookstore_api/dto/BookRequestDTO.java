@@ -26,6 +26,7 @@ public class BookRequestDTO {
     @Size(max = 2000, message = "Synopsis cannot exceed 2000 characters")
     private String synopsis;
 
+    @NotBlank(message = "Genre cannot be empty")
     private String genre;
 
     @NotBlank(message = "Publisher cannot be empty")
@@ -34,6 +35,7 @@ public class BookRequestDTO {
     @Positive(message = "Page count must be positive")
     private int pageCount;
 
+    @NotBlank(message = "Image cannot be empty")
     private String imageUrl;
 
     @Valid

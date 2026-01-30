@@ -17,7 +17,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(DomainValidationException.class)
     public ResponseEntity<Map<String, Object>> handleDomainValidation(DomainValidationException ex) {
         return ResponseEntity
-                .status(HttpStatus.NOT_FOUND) // <-- aqui usamos 404
+                .status(HttpStatus.NOT_FOUND)
                 .body(Map.of(
                         "timestamp", LocalDateTime.now(),
                         "status", 404,

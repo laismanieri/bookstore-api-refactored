@@ -47,7 +47,7 @@ public class BookService {
         return bookMapper.toResponse(book);
     }
     @Transactional
-    public BookResponseDTO addNewBook(BookRequestDTO dto) {
+    public BookResponseDTO addNewBook(@Valid BookRequestDTO dto) {
         log.info("Creating book: {}", dto.getTitle());
 
         bookValidator.validateBook(dto);

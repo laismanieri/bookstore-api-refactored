@@ -9,13 +9,20 @@ import jakarta.persistence.Lob;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.List;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
-@Table(name = "books", indexes = { @Index(name = "IDX_GUID_BOOK", columnList = "GUID")})
+@Table(name = "books", indexes = {
+        @Index(name = "IDX_GUID_BOOK", columnList = "GUID")})
 public class BookEntity extends BaseEntity {
 
     @Column(nullable = false)
