@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -51,8 +52,8 @@ public class BookDetailsController {
     }
 
     @DeleteMapping("/{guid}")
-    public ResponseEntity<Void> deleteDetailBook (@PathVariable String guid){
+    public ResponseEntity<Map> deleteDetailBook (@PathVariable String guid){
         bookDetailsService.deleteDetailBook(guid);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(Map.of("message", "Detail deleted successfully"));
     }
 }
